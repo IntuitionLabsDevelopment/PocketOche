@@ -1,8 +1,11 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { int, sqliteTable } from "drizzle-orm/sqlite-core";
 
-export const usersTable = sqliteTable("users_table", {
-  id: int().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-  age: int().notNull(),
-  email: text().notNull().unique(),
+export const timedTrainingTable = sqliteTable("timed_training_table", {
+  completionTime: int({ mode: "timestamp_ms" }),
+  triples: int(),
+  outers: int(),
+  bullseyes: int(),
+  doubles: int(),
 });
+
+export type TimedTraining = typeof timedTrainingTable.$inferSelect;

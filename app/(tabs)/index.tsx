@@ -1,65 +1,58 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import ScrollView from "@/components/ScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useSQLiteContext } from "expo-sqlite";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import * as schema from "@/db/schema";
+import { useState, useEffect } from "react";
+import React from "react";
+import { desc } from "drizzle-orm";
 
 export default function HomeScreen() {
+  const [data, setData] = useState<schema.TimedTraining[]>([]);
+
+  const db = useSQLiteContext();
+  const drizzleDb = drizzle(db, { schema });
+
+  useEffect(() => {
+    const load = async () => {
+      const data = await drizzleDb.query.timedTrainingTable.findMany({
+        limit: 5,
+        orderBy: [desc(schema.timedTrainingTable.completionTime)],
+      });
+      setData(data);
+    };
+    load();
+  }, []);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
+    <ScrollView>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">Timed Training</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
+        <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
+        {data.map((item) => (
+          <ThemedView key={item.completionTime?.toISOString()}>
+            <ThemedText type="defaultSemiBold">
+              {item.completionTime?.toDateString()}
+            </ThemedText>
+            <ThemedText>Triples: {item.triples}</ThemedText>
+            <ThemedText>Outers: {item.outers}</ThemedText>
+            <ThemedText>Bullseyes: {item.bullseyes}</ThemedText>
+            <ThemedText>Doubles: {item.doubles}/60</ThemedText>
+          </ThemedView>
+        ))}
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
+    height: 50,
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
