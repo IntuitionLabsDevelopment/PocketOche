@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { desc } from "drizzle-orm";
 
-export default function HomeScreen() {
+export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);
 
   const db = useSQLiteContext();
@@ -19,7 +19,7 @@ export default function HomeScreen() {
   useEffect(() => {
     const load = async () => {
       const data = await drizzleDb.query.timedTrainingTable.findMany({
-        limit: 5,
+        limit: 10,
         orderBy: [desc(schema.timedTrainingTable.completionTime)],
       });
       setData(data);
@@ -29,9 +29,6 @@ export default function HomeScreen() {
 
   return (
     <ScrollView>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Timed Training</ThemedText>
-      </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
         {data.map((item) => (
