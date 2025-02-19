@@ -37,7 +37,7 @@ export default function RootLayout() {
       await db.delete(timedTrainingTable);
 
       const dummyData: TimedTraining[] = Array.from(
-        { length: 5 },
+        { length: 12 },
         (_, index) => {
           const date = new Date();
           date.setDate(index);
@@ -50,6 +50,8 @@ export default function RootLayout() {
           };
         },
       );
+
+      console.log("Inserting dummy data...");
 
       await db.insert(timedTrainingTable).values(dummyData);
     })();
@@ -97,7 +99,8 @@ export default function RootLayout() {
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
           <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="training" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style="auto" />
