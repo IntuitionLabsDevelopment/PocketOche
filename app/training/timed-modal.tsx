@@ -3,14 +3,28 @@ import Tally from "@/components/Tally";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Button, StyleSheet } from "react-native";
 
 export default function Modal() {
   const router = useRouter();
 
+  const [triples, setTriples] = useState(0);
+  const [outerBull, setOuterBull] = useState(0);
+  const [bull, setBull] = useState(0);
+  const [doubles, setDoubles] = useState(0);
+
   const onFinish = () => {
-    // Save scores
-    // todo: save to db
+    // Save scores to db
+    const scores = {
+      triples,
+      outerBull,
+      bull,
+      doubles,
+    };
+    // todo: save scores to db
+    console.log("Scores to save:", scores);
+
     // Go back to main screen
     router.back();
   };
@@ -20,18 +34,18 @@ export default function Modal() {
       <ThemedView style={styles.container}>
         <ThemedView style={styles.section}>
           <ThemedText type="title">Triples</ThemedText>
-          <Tally />
+          <Tally onChange={setTriples} />
         </ThemedView>
         <ThemedView style={styles.section}>
           <ThemedText type="title">Bullseyes</ThemedText>
           <ThemedView style={styles.bull}>
-            <Tally heading="Outer" />
-            <Tally heading="Bull" />
+            <Tally heading="Outer" onChange={setOuterBull} />
+            <Tally heading="Bull" onChange={setBull} />
           </ThemedView>
         </ThemedView>
         <ThemedView style={styles.section}>
           <ThemedText type="title">Doubles</ThemedText>
-          <Tally />
+          <Tally onChange={setDoubles} />
         </ThemedView>
         <Button title="Finish" onPress={onFinish} />
       </ThemedView>

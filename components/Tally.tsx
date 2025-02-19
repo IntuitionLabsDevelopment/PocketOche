@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemedView } from "./ThemedView";
 import { Button, StyleSheet } from "react-native";
 import { ThemedText } from "./ThemedText";
 
 interface TallyProps {
   heading?: string;
+  onChange?: (value: number) => void;
 }
 
-export default function Tally({ heading }: TallyProps) {
+export default function Tally({ heading, onChange }: TallyProps) {
   const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(counter);
+    }
+  }, [counter, onChange]);
 
   return (
     <ThemedView style={styles.container}>
