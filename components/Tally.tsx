@@ -6,9 +6,14 @@ import { ThemedText } from "./ThemedText";
 interface TallyProps {
   heading?: string;
   onChange?: (value: number) => void;
+  allowNegative?: boolean;
 }
 
-export default function Tally({ heading, onChange }: TallyProps) {
+export default function Tally({
+  heading,
+  onChange,
+  allowNegative = true,
+}: TallyProps) {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
@@ -17,12 +22,19 @@ export default function Tally({ heading, onChange }: TallyProps) {
     }
   }, [counter, onChange]);
 
+  const increment = () => setCounter(counter + 1);
+  const decrement = () => {
+    if (allowNegative || counter > 0) {
+      setCounter(counter - 1);
+    }
+  };
+
   return (
     <ThemedView style={styles.container}>
       {heading && <ThemedText type="subtitle">{heading}</ThemedText>}
-      <Button onPress={() => setCounter(counter + 1)} title="+" />
+      <Button onPress={increment} title="+" />
       <ThemedText type="title">{counter}</ThemedText>
-      <Button onPress={() => setCounter(counter - 1)} title="-" />
+      <Button onPress={decrement} title="-" />
     </ThemedView>
   );
 }

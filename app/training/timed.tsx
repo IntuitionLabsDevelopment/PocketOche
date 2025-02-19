@@ -3,14 +3,12 @@ import { StyleSheet } from "react-native";
 import ScrollView from "@/components/ScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useSQLiteContext } from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as schema from "@/db/schema";
-import { useState, useEffect } from "react";
-import React from "react";
 import { desc } from "drizzle-orm";
-import Tally from "@/components/Tally";
+import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Link } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import React, { useEffect, useState } from "react";
 
 export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);

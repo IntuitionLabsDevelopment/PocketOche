@@ -34,18 +34,22 @@ export default function Modal() {
       <ThemedView style={styles.container}>
         <ThemedView style={styles.section}>
           <ThemedText type="title">Triples</ThemedText>
-          <Tally onChange={setTriples} />
+          <Tally onChange={setTriples} allowNegative={false} />
         </ThemedView>
         <ThemedView style={styles.section}>
           <ThemedText type="title">Bullseyes</ThemedText>
           <ThemedView style={styles.bull}>
-            <Tally heading="Outer" onChange={setOuterBull} />
-            <Tally heading="Bull" onChange={setBull} />
+            <Tally
+              heading="Outer"
+              onChange={setOuterBull}
+              allowNegative={false}
+            />
+            <Tally heading="Bull" onChange={setBull} allowNegative={false} />
           </ThemedView>
         </ThemedView>
         <ThemedView style={styles.section}>
           <ThemedText type="title">Doubles</ThemedText>
-          <Tally onChange={setDoubles} />
+          <Tally onChange={setDoubles} allowNegative={false} />
         </ThemedView>
         <Button title="Finish" onPress={onFinish} />
       </ThemedView>
