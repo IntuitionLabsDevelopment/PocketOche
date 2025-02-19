@@ -1,20 +1,20 @@
+import { TimedTraining, timedTrainingTable } from "@/db/schema";
+import migrations from "@/drizzle/migrations";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
+    DarkTheme,
+    DefaultTheme,
+    ThemeProvider,
 } from "@react-navigation/native";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import * as SQLite from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
 import { Suspense, useEffect } from "react";
-import "react-native-reanimated";
-import * as SQLite from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import { ActivityIndicator, Text, View } from "react-native";
-import { TimedTraining, timedTrainingTable } from "@/db/schema";
-import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import migrations from "@/drizzle/migrations";
+import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { SQLiteProvider } from "expo-sqlite";
@@ -42,11 +42,12 @@ export default function RootLayout() {
           const date = new Date();
           date.setDate(index);
           return {
-            completionTime: date,
+            id: index,
             triples: Math.floor(Math.random() * 20) + 1,
             outers: Math.floor(Math.random() * 20) + 1,
             bullseyes: Math.floor(Math.random() * 20) + 1,
             doubles: Math.floor(Math.random() * 20) + 1,
+            completedAt: date,
           };
         },
       );

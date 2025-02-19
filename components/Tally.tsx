@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { ThemedView } from "./ThemedView";
 import { Button, StyleSheet } from "react-native";
 import { ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
 
 interface TallyProps {
   heading?: string;

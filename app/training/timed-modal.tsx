@@ -2,28 +2,34 @@ import ScrollView from "@/components/ScrollView";
 import Tally from "@/components/Tally";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import * as schema from "@/db/schema";
+import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Button, StyleSheet } from "react-native";
 
 export default function Modal() {
   const router = useRouter();
 
+  const db = useSQLiteContext();
+  const drizzleDb = drizzle(db, { schema });
+
   const [triples, setTriples] = useState(0);
-  const [outerBull, setOuterBull] = useState(0);
-  const [bull, setBull] = useState(0);
+  const [outers, setOuters] = useState(0);
+  const [bullseyes, setBullseyes] = useState(0);
   const [doubles, setDoubles] = useState(0);
 
-  const onFinish = () => {
+  const onFinish = async () => {
     // Save scores to db
     const scores = {
       triples,
-      outerBull,
-      bull,
+      outers,
+      bullseyes,
       doubles,
     };
-    // todo: save scores to db
-    console.log("Scores to save:", scores);
+
+    await drizzleDb.insert(schema.timedTrainingTable).values(scores);
 
     // Go back to main screen
     router.back();
@@ -39,12 +45,12 @@ export default function Modal() {
         <ThemedView style={styles.section}>
           <ThemedText type="title">Bullseyes</ThemedText>
           <ThemedView style={styles.bull}>
+            <Tally heading="Outer" onChange={setOuters} allowNegative={false} />
             <Tally
-              heading="Outer"
-              onChange={setOuterBull}
+              heading="Bull"
+              onChange={setBullseyes}
               allowNegative={false}
             />
-            <Tally heading="Bull" onChange={setBull} allowNegative={false} />
           </ThemedView>
         </ThemedView>
         <ThemedView style={styles.section}>

@@ -20,7 +20,7 @@ export default function TimedTraining() {
     const load = async () => {
       const data = await drizzleDb.query.timedTrainingTable.findMany({
         limit: 10,
-        orderBy: [desc(schema.timedTrainingTable.completionTime)],
+        orderBy: [desc(schema.timedTrainingTable.completedAt)],
       });
       setData(data);
     };
@@ -35,9 +35,9 @@ export default function TimedTraining() {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
         {data.map((item) => (
-          <ThemedView key={item.completionTime?.toISOString()}>
+          <ThemedView key={item.completedAt.toISOString()}>
             <ThemedText type="defaultSemiBold">
-              {item.completionTime?.toDateString()}
+              {item.completedAt.toDateString()}
             </ThemedText>
             <ThemedText>Triples: {item.triples}</ThemedText>
             <ThemedText>Outers: {item.outers}</ThemedText>
