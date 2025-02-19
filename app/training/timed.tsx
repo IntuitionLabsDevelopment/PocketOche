@@ -9,6 +9,8 @@ import * as schema from "@/db/schema";
 import { useState, useEffect } from "react";
 import React from "react";
 import { desc } from "drizzle-orm";
+import Tally from "@/components/Tally";
+import { Link } from "expo-router";
 
 export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);
@@ -29,6 +31,9 @@ export default function TimedTraining() {
 
   return (
     <ScrollView>
+      <ThemedView style={styles.titleContainer}>
+        <Link href="/training/timed-modal">Start Session</Link>
+      </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
         {data.map((item) => (
@@ -57,12 +62,5 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 8,
     marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
   },
 });
