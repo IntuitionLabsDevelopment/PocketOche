@@ -1,3 +1,4 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
 import ScrollView from "@/components/ScrollView";
@@ -8,7 +9,7 @@ import { desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);
@@ -16,21 +17,27 @@ export default function TimedTraining() {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
 
-  useEffect(() => {
-    const load = async () => {
-      const data = await drizzleDb.query.timedTrainingTable.findMany({
-        limit: 10,
-        orderBy: [desc(schema.timedTrainingTable.completedAt)],
-      });
-      setData(data);
-    };
-    load();
-  }, []);
+  const load = async () => {
+    console.log("Loading timed training data...");
+    const data = await drizzleDb.query.timedTrainingTable.findMany({
+      limit: 10,
+      orderBy: [desc(schema.timedTrainingTable.completedAt)],
+    });
+    setData(data);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, []),
+  );
 
   return (
     <ScrollView>
       <ThemedView style={styles.titleContainer}>
-        <Link href="/training/timed-modal">Start Session</Link>
+        <ThemedText>
+          <Link href="/training/timed-session">Start Session</Link>
+        </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>

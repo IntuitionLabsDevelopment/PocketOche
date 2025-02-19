@@ -9,7 +9,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Button, StyleSheet } from "react-native";
 
-export default function Modal() {
+export default function TimedSession() {
   const router = useRouter();
 
   const db = useSQLiteContext();

@@ -5,8 +5,8 @@ export default function Layout() {
     <Stack>
       <Stack.Screen name="timed" options={{ title: "Timed Training" }} />
       <Stack.Screen
-        name="timed-modal"
-        options={{ presentation: "modal", title: "Timed Training Session" }}
+        name="timed-session"
+        options={{ title: "Timed Training Session" }}
       />
     </Stack>
   );

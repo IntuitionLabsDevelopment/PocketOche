@@ -1,9 +1,9 @@
 import { TimedTraining, timedTrainingTable } from "@/db/schema";
 import migrations from "@/drizzle/migrations";
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
