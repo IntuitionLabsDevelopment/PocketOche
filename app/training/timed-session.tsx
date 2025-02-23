@@ -3,6 +3,7 @@ import ScrollView from "@/components/ScrollView";
 import Tally from "@/components/Tally";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import TimedSections from "@/components/TimedSections";
 import * as schema from "@/db/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useRouter } from "expo-router";
@@ -36,28 +37,37 @@ export default function TimedSession() {
     router.back();
   };
 
+  const triplesSection = (
+    <ThemedView style={styles.section}>
+      <ThemedText type="title">Triples</ThemedText>
+      <Tally onChange={setTriples} allowNegative={false} />
+    </ThemedView>
+  );
+
+  const bullSection = (
+    <ThemedView style={styles.section}>
+      <ThemedText type="title">Bullseyes</ThemedText>
+      <ThemedView style={styles.bull}>
+        <Tally heading="Outer" onChange={setOuters} allowNegative={false} />
+        <Tally heading="Bull" onChange={setBullseyes} allowNegative={false} />
+      </ThemedView>
+    </ThemedView>
+  );
+
+  const doublesSection = (
+    <ThemedView style={styles.section}>
+      <ThemedText type="title">Doubles</ThemedText>
+      <Tally onChange={setDoubles} allowNegative={false} />
+    </ThemedView>
+  );
+
   return (
     <ScrollView>
       <ThemedView style={styles.container}>
-        <ThemedView style={styles.section}>
-          <ThemedText type="title">Triples</ThemedText>
-          <Tally onChange={setTriples} allowNegative={false} />
-        </ThemedView>
-        <ThemedView style={styles.section}>
-          <ThemedText type="title">Bullseyes</ThemedText>
-          <ThemedView style={styles.bull}>
-            <Tally heading="Outer" onChange={setOuters} allowNegative={false} />
-            <Tally
-              heading="Bull"
-              onChange={setBullseyes}
-              allowNegative={false}
-            />
-          </ThemedView>
-        </ThemedView>
-        <ThemedView style={styles.section}>
-          <ThemedText type="title">Doubles</ThemedText>
-          <Tally onChange={setDoubles} allowNegative={false} />
-        </ThemedView>
+        <TimedSections
+          sections={[triplesSection, bullSection, doublesSection]}
+          interval={10000}
+        />
         <Button
           title="Finish"
           onPress={onFinish}
