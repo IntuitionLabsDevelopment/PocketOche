@@ -13,9 +13,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/pochet_oche_icon.png",
+        "backgroundColor": "#0028CA"
+      },
+      "package": "com.jakecoombs.PocketOche"
     },
     "web": {
       "bundler": "metro",
