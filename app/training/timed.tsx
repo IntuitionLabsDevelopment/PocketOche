@@ -6,6 +6,8 @@ import ScrollView from "@/components/ScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import * as schema from "@/db/schema";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { Picker } from "@react-native-picker/picker";
 import { desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useRouter } from "expo-router";
@@ -14,6 +16,8 @@ import React, { useCallback, useState } from "react";
 
 export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);
+  const [selectedTime, setSelectedTime] = useState(5);
+  const textColor = useThemeColor({}, "text");
   const router = useRouter();
 
   const db = useSQLiteContext();
@@ -43,10 +47,26 @@ export default function TimedTraining() {
         from 1-20, with three darts at each number, hitting as many doubles as
         you can.
       </ThemedText>
+      <ThemedView>
+        <ThemedText type="defaultSemiBold">Select Time Per Round</ThemedText>
+        <Picker
+          selectedValue={selectedTime}
+          onValueChange={(itemValue, itemIndex) => setSelectedTime(itemValue)}
+          style={{ color: textColor }}
+          dropdownIconColor={textColor}
+        >
+          <Picker.Item label="No timer" value={-1} />
+          <Picker.Item label="3 Minutes" value={3} />
+          <Picker.Item label="5 Minutes" value={5} />
+          <Picker.Item label="10 Minutes" value={10} />
+        </Picker>
+      </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <Button
-          title="Start Session"
-          onPress={() => router.push("/training/timed-session")}
+          title="Start New Session"
+          onPress={() =>
+            router.push(`/training/timed-session?time=${selectedTime}`)
+          }
           style={{ backgroundColor: "#30DD00" }}
         />
       </ThemedView>

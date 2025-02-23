@@ -6,15 +6,17 @@ import { ThemedView } from "@/components/ThemedView";
 import TimedSections from "@/components/TimedSections";
 import * as schema from "@/db/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
-const INTERVAL_5M = 5 * 60 * 1000; // 5 minutes
-
 export default function TimedSession() {
   const router = useRouter();
+
+  const params = useLocalSearchParams<{ time?: string }>();
+  const time = params.time ? parseInt(params.time) : 5;
+  const timerInterval = time * 60 * 1000;
 
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
@@ -73,11 +75,11 @@ export default function TimedSession() {
       <ThemedView style={styles.container}>
         <TimedSections
           sections={[
-            { component: triplesSection, timed: true },
-            { component: bullSection, timed: true },
+            { component: triplesSection, timed: time > 0 },
+            { component: bullSection, timed: time > 0 },
             { component: doublesSection },
           ]}
-          interval={INTERVAL_5M}
+          interval={timerInterval}
         />
       </ThemedView>
     </ScrollView>
