@@ -11,6 +11,8 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
+const INTERVAL_5M = 5 * 60 * 1000; // 5 minutes
+
 export default function TimedSession() {
   const router = useRouter();
 
@@ -58,6 +60,11 @@ export default function TimedSession() {
     <ThemedView style={styles.section}>
       <ThemedText type="title">Doubles</ThemedText>
       <Tally onChange={setDoubles} allowNegative={false} />
+      <Button
+        title="Finish"
+        onPress={onFinish}
+        style={{ backgroundColor: "#30DD00" }}
+      />
     </ThemedView>
   );
 
@@ -70,12 +77,7 @@ export default function TimedSession() {
             { component: bullSection, timed: true },
             { component: doublesSection },
           ]}
-          interval={5000}
-        />
-        <Button
-          title="Finish"
-          onPress={onFinish}
-          style={{ backgroundColor: "#30DD00" }}
+          interval={INTERVAL_5M}
         />
       </ThemedView>
     </ScrollView>
