@@ -24,7 +24,6 @@ export default function TimedTraining() {
   const drizzleDb = drizzle(db, { schema });
 
   const load = async () => {
-    console.log("Loading timed training data...");
     const data = await drizzleDb.query.timedTrainingTable.findMany({
       limit: 10,
       orderBy: [desc(schema.timedTrainingTable.completedAt)],
@@ -35,7 +34,7 @@ export default function TimedTraining() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, []),
+    }, [])
   );
 
   return (

@@ -1,4 +1,3 @@
-import { TimedTraining, timedTrainingTable } from "@/db/schema";
 import migrations from "@/drizzle/migrations";
 import {
   DarkTheme,
@@ -29,45 +28,16 @@ export default function RootLayout() {
   const db = drizzle(expo);
 
   const { success, error } = useMigrations(db, migrations);
-
-  useEffect(() => {
-    if (!success) return;
-
-    (async () => {
-      await db.delete(timedTrainingTable);
-
-      const dummyData: TimedTraining[] = Array.from(
-        { length: 12 },
-        (_, index) => {
-          const date = new Date();
-          date.setDate(index);
-          return {
-            id: index,
-            triples: Math.floor(Math.random() * 20) + 1,
-            outers: Math.floor(Math.random() * 20) + 1,
-            bullseyes: Math.floor(Math.random() * 20) + 1,
-            doubles: Math.floor(Math.random() * 20) + 1,
-            completedAt: date,
-          };
-        },
-      );
-
-      console.log("Inserting dummy data...");
-
-      await db.insert(timedTrainingTable).values(dummyData);
-    })();
-  }, [success]);
-
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && success) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, success]);
 
   if (!loaded) {
     return null;
