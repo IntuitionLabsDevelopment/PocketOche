@@ -71,6 +71,9 @@ export default function TimedTraining() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
+        {data.length === 0 && (
+          <ThemedText type="description">No recent sessions</ThemedText>
+        )}
         {data.map((item) => (
           <ThemedView key={item.completedAt.toISOString()}>
             <ThemedText type="defaultSemiBold">
@@ -80,6 +83,10 @@ export default function TimedTraining() {
             <ThemedText>Outers: {item.outers}</ThemedText>
             <ThemedText>Bullseyes: {item.bullseyes}</ThemedText>
             <ThemedText>Doubles: {item.doubles}/60</ThemedText>
+            <ThemedText>
+              Round Time:{" "}
+              {item.timeInterval ? `${item.timeInterval} Minutes` : "N/A"}
+            </ThemedText>
           </ThemedView>
         ))}
       </ThemedView>

@@ -33,6 +33,7 @@ export default function TimedSession() {
       outers,
       bullseyes,
       doubles,
+      timeInterval: time > 0 ? time : null,
     };
 
     await drizzleDb.insert(schema.timedTrainingTable).values(scores);
