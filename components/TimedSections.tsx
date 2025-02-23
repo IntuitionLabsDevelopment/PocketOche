@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 
+interface TimedSection {
+  component: React.ReactNode;
+  timed?: boolean;
+}
+
 interface TimedSectionsProps {
-  sections: React.ReactNode[];
+  sections: TimedSection[];
   interval: number; // interval in milliseconds
 }
 
@@ -24,36 +29,42 @@ export default function TimedSections({
     };
 
     const timer = setInterval(() => {
+      if (!sections[currentIndex].timed) {
+        return;
+      }
       setCurrentIndex((prevIndex) => (prevIndex + 1) % sections.length);
-      animateProgress();
     }, interval);
 
-    animateProgress(); // Start the animation immediately
+    if (sections[currentIndex].timed) {
+      animateProgress();
+    }
 
     return () => clearInterval(timer);
-  }, [sections.length, interval, progress]);
+  }, [currentIndex, sections, interval, progress]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.progressBarContainer}>
-        <Animated.View
-          style={[
-            styles.progressBar,
-            {
-              width: progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: ["0%", "100%"],
-              }),
-            },
-          ]}
-        />
-      </View>
+      {sections[currentIndex].timed && (
+        <View style={styles.progressBarContainer}>
+          <Animated.View
+            style={[
+              styles.progressBar,
+              {
+                width: progress.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ["0%", "100%"],
+                }),
+              },
+            ]}
+          />
+        </View>
+      )}
       {sections.map((section, index) => (
         <View
           key={index}
           style={{ display: index === currentIndex ? "flex" : "none" }}
         >
-          {section}
+          {section.component}
         </View>
       ))}
     </View>

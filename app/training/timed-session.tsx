@@ -65,8 +65,12 @@ export default function TimedSession() {
     <ScrollView>
       <ThemedView style={styles.container}>
         <TimedSections
-          sections={[triplesSection, bullSection, doublesSection]}
-          interval={10000}
+          sections={[
+            { component: triplesSection, timed: true },
+            { component: bullSection, timed: true },
+            { component: doublesSection },
+          ]}
+          interval={5000}
         />
         <Button
           title="Finish"
