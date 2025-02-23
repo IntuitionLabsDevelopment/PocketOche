@@ -4,7 +4,7 @@
     "slug": "PocketOche",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/pochet_oche_icon.png",
+    "icon": "./assets/images/pocket_oche_icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/pochet_oche_icon.png",
+        "foregroundImage": "./assets/images/pocket_oche_icon.png",
         "backgroundColor": "#0028CA"
       },
       "package": "com.jakecoombs.PocketOche"
