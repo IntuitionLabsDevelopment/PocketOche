@@ -3,15 +3,20 @@ import ScrollView from "@/components/ScrollView";
 import Tally from "@/components/Tally";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import TimedSections from "@/components/TimedSections";
 import * as schema from "@/db/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
 export default function TimedSession() {
   const router = useRouter();
+
+  const params = useLocalSearchParams<{ time?: string }>();
+  const time = params.time ? parseInt(params.time) : 5;
+  const timerInterval = time * 60 * 1000;
 
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
@@ -36,32 +41,45 @@ export default function TimedSession() {
     router.back();
   };
 
+  const triplesSection = (
+    <ThemedView style={styles.section}>
+      <ThemedText type="title">Triples</ThemedText>
+      <Tally onChange={setTriples} allowNegative={false} />
+    </ThemedView>
+  );
+
+  const bullSection = (
+    <ThemedView style={styles.section}>
+      <ThemedText type="title">Bullseyes</ThemedText>
+      <ThemedView style={styles.bull}>
+        <Tally heading="Outer" onChange={setOuters} allowNegative={false} />
+        <Tally heading="Bull" onChange={setBullseyes} allowNegative={false} />
+      </ThemedView>
+    </ThemedView>
+  );
+
+  const doublesSection = (
+    <ThemedView style={styles.section}>
+      <ThemedText type="title">Doubles</ThemedText>
+      <Tally onChange={setDoubles} allowNegative={false} />
+      <Button
+        title="Finish"
+        onPress={onFinish}
+        style={{ backgroundColor: "#30DD00" }}
+      />
+    </ThemedView>
+  );
+
   return (
     <ScrollView>
       <ThemedView style={styles.container}>
-        <ThemedView style={styles.section}>
-          <ThemedText type="title">Triples</ThemedText>
-          <Tally onChange={setTriples} allowNegative={false} />
-        </ThemedView>
-        <ThemedView style={styles.section}>
-          <ThemedText type="title">Bullseyes</ThemedText>
-          <ThemedView style={styles.bull}>
-            <Tally heading="Outer" onChange={setOuters} allowNegative={false} />
-            <Tally
-              heading="Bull"
-              onChange={setBullseyes}
-              allowNegative={false}
-            />
-          </ThemedView>
-        </ThemedView>
-        <ThemedView style={styles.section}>
-          <ThemedText type="title">Doubles</ThemedText>
-          <Tally onChange={setDoubles} allowNegative={false} />
-        </ThemedView>
-        <Button
-          title="Finish"
-          onPress={onFinish}
-          style={{ backgroundColor: "#30DD00" }}
+        <TimedSections
+          sections={[
+            { component: triplesSection, timed: time > 0 },
+            { component: bullSection, timed: time > 0 },
+            { component: doublesSection },
+          ]}
+          interval={timerInterval}
         />
       </ThemedView>
     </ScrollView>
