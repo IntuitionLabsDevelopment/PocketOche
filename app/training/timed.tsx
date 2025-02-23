@@ -35,7 +35,7 @@ export default function TimedTraining() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, [])
+    }, []),
   );
 
   return (
