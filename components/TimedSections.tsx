@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
+import Button from "./Button";
+import { ThemedText } from "./ThemedText";
 
 interface TimedSection {
   component: React.ReactNode;
@@ -17,6 +19,17 @@ export default function TimedSections({
 }: TimedSectionsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const progress = useState(new Animated.Value(0))[0];
+
+  const increment = () => {
+    if (currentIndex < sections.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+  const decrement = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
 
   useEffect(() => {
     const animateProgress = () => {
@@ -40,10 +53,17 @@ export default function TimedSections({
     }
 
     return () => clearInterval(timer);
-  }, [currentIndex, sections, interval, progress]);
+  }, [currentIndex, interval, progress]);
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Button title="Back" onPress={decrement} style={{ marginRight: 10 }} />
+        <ThemedText type="title">
+          {currentIndex + 1} / {sections.length}
+        </ThemedText>
+        <Button title="Next" onPress={increment} style={{ marginLeft: 10 }} />
+      </View>
       {sections[currentIndex].timed && (
         <View style={styles.progressBarContainer}>
           <Animated.View
@@ -75,6 +95,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   progressBarContainer: {
     height: 4,
