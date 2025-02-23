@@ -90,6 +90,16 @@ export default function TimedTraining() {
           </ThemedView>
         ))}
       </ThemedView>
+      <ThemedView style={styles.titleContainer}>
+        <Button
+          title="Delete All Sessions Data"
+          onPress={async () => {
+            await drizzleDb.delete(schema.timedTrainingTable);
+            load();
+          }}
+          style={{ backgroundColor: "#FF0000" }}
+        />
+      </ThemedView>
     </ScrollView>
   );
 }
