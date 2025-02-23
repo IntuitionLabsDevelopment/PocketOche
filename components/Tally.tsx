@@ -31,7 +31,14 @@ export default function Tally({
   };
 
   function tallyButton(title: string, onPress: () => void) {
-    return <Button onPress={onPress} style={styles.button} textStyle={styles.buttonText} title={title} />
+    return (
+      <Button
+        onPress={onPress}
+        style={styles.button}
+        textStyle={styles.buttonText}
+        title={title}
+      />
+    );
   }
 
   return (

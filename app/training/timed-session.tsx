@@ -1,3 +1,4 @@
+import Button from "@/components/Button";
 import ScrollView from "@/components/ScrollView";
 import Tally from "@/components/Tally";
 import { ThemedText } from "@/components/ThemedText";
@@ -7,7 +8,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 export default function TimedSession() {
   const router = useRouter();
@@ -57,7 +58,11 @@ export default function TimedSession() {
           <ThemedText type="title">Doubles</ThemedText>
           <Tally onChange={setDoubles} allowNegative={false} />
         </ThemedView>
-        <Button title="Finish" onPress={onFinish} />
+        <Button
+          title="Finish"
+          onPress={onFinish}
+          style={{ backgroundColor: "#30DD00" }}
+        />
       </ThemedView>
     </ScrollView>
   );
