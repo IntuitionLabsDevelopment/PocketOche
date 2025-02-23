@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import Button from "./Button";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 
@@ -29,12 +30,16 @@ export default function Tally({
     }
   };
 
+  function tallyButton(title: string, onPress: () => void) {
+    return <Button onPress={onPress} style={styles.button} textStyle={styles.buttonText} title={title} />
+  }
+
   return (
     <ThemedView style={styles.container}>
       {heading && <ThemedText type="subtitle">{heading}</ThemedText>}
-      <Button onPress={increment} title="+" />
+      {tallyButton("+", increment)}
       <ThemedText type="title">{counter}</ThemedText>
-      <Button onPress={decrement} title="-" />
+      {tallyButton("-", decrement)}
     </ThemedView>
   );
 }
@@ -45,5 +50,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     justifyContent: "center",
     alignItems: "center",
+  },
+  button: {
+    paddingHorizontal: 16,
+  },
+  buttonText: {
+    fontSize: 24,
   },
 });
