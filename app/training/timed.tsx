@@ -31,11 +31,18 @@ export default function TimedTraining() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, []),
+    }, [])
   );
 
   return (
     <ScrollView>
+      <ThemedText type="description">
+        Use timed training to improve your aim at the board. You will have a set
+        amount of time to hit as many triple 20's, then bullseyes as possible.
+        After the two timed rounds, you will finish by going around the board
+        from 1-20, with three darts at each number, hitting as many doubles as
+        you can.
+      </ThemedText>
       <ThemedView style={styles.titleContainer}>
         <Button
           title="Start Session"
