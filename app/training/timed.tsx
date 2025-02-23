@@ -1,40 +1,54 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
+import Button from "@/components/Button";
 import ScrollView from "@/components/ScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useSQLiteContext } from "expo-sqlite";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as schema from "@/db/schema";
-import { useState, useEffect } from "react";
-import React from "react";
 import { desc } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import React, { useCallback, useState } from "react";
 
 export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);
+  const router = useRouter();
 
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
 
-  useEffect(() => {
-    const load = async () => {
-      const data = await drizzleDb.query.timedTrainingTable.findMany({
-        limit: 10,
-        orderBy: [desc(schema.timedTrainingTable.completionTime)],
-      });
-      setData(data);
-    };
-    load();
-  }, []);
+  const load = async () => {
+    console.log("Loading timed training data...");
+    const data = await drizzleDb.query.timedTrainingTable.findMany({
+      limit: 10,
+      orderBy: [desc(schema.timedTrainingTable.completedAt)],
+    });
+    setData(data);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, []),
+  );
 
   return (
     <ScrollView>
+      <ThemedView style={styles.titleContainer}>
+        <Button
+          title="Start Session"
+          onPress={() => router.push("/training/timed-session")}
+          style={{ backgroundColor: "#30DD00" }}
+        />
+      </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
         {data.map((item) => (
-          <ThemedView key={item.completionTime?.toISOString()}>
+          <ThemedView key={item.completedAt.toISOString()}>
             <ThemedText type="defaultSemiBold">
-              {item.completionTime?.toDateString()}
+              {item.completedAt.toDateString()}
             </ThemedText>
             <ThemedText>Triples: {item.triples}</ThemedText>
             <ThemedText>Outers: {item.outers}</ThemedText>
@@ -53,16 +67,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+    flex: 1,
+    justifyContent: "center",
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
   },
 });
