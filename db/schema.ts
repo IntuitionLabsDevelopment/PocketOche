@@ -10,6 +10,7 @@ export const timedTrainingTable = sqliteTable("timed_training", {
   completedAt: integer("completed_at", { mode: "timestamp_ms" })
     .default(sql`(CURRENT_TIMESTAMP)`)
     .notNull(),
+  timeInterval: integer("time_interval"),
 });
 
 export type TimedTraining = typeof timedTrainingTable.$inferSelect;
