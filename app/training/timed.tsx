@@ -24,7 +24,6 @@ export default function TimedTraining() {
   const drizzleDb = drizzle(db, { schema });
 
   const load = async () => {
-    console.log("Loading timed training data...");
     const data = await drizzleDb.query.timedTrainingTable.findMany({
       limit: 10,
       orderBy: [desc(schema.timedTrainingTable.completedAt)],
@@ -35,7 +34,7 @@ export default function TimedTraining() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, []),
+    }, [])
   );
 
   return (
@@ -72,6 +71,9 @@ export default function TimedTraining() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
+        {data.length === 0 && (
+          <ThemedText type="description">No recent sessions</ThemedText>
+        )}
         {data.map((item) => (
           <ThemedView key={item.completedAt.toISOString()}>
             <ThemedText type="defaultSemiBold">
@@ -81,8 +83,22 @@ export default function TimedTraining() {
             <ThemedText>Outers: {item.outers}</ThemedText>
             <ThemedText>Bullseyes: {item.bullseyes}</ThemedText>
             <ThemedText>Doubles: {item.doubles}/60</ThemedText>
+            <ThemedText>
+              Round Time:{" "}
+              {item.timeInterval ? `${item.timeInterval} Minutes` : "N/A"}
+            </ThemedText>
           </ThemedView>
         ))}
+      </ThemedView>
+      <ThemedView style={styles.titleContainer}>
+        <Button
+          title="Delete All Sessions Data"
+          onPress={async () => {
+            await drizzleDb.delete(schema.timedTrainingTable);
+            load();
+          }}
+          style={{ backgroundColor: "#FF0000" }}
+        />
       </ThemedView>
     </ScrollView>
   );
