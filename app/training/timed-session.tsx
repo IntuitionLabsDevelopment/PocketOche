@@ -66,7 +66,8 @@ export default function TimedSession() {
       <Button
         title="Finish"
         onPress={onFinish}
-        style={{ backgroundColor: "#30DD00" }}
+        style={styles.finishButton}
+        textStyle={{ fontSize: 20 }}
       />
     </ThemedView>
   );
@@ -93,11 +94,18 @@ const styles = StyleSheet.create({
   },
   section: {
     marginVertical: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
   },
   bull: {
-    marginTop: 8,
     flexDirection: "row",
     flex: 1,
+    width: "100%",
     justifyContent: "space-evenly",
+  },
+  finishButton: {
+    backgroundColor: "#30DD00",
+    padding: 16,
   },
 });
