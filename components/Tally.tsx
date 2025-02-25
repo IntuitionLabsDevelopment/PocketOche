@@ -45,7 +45,7 @@ export default function Tally({
     <ThemedView style={styles.container}>
       {heading && <ThemedText type="subtitle">{heading}</ThemedText>}
       {tallyButton("+", increment)}
-      <ThemedText type="title">{counter}</ThemedText>
+      <ThemedText style={[styles.counter]}>{counter}</ThemedText>
       {tallyButton("-", decrement)}
     </ThemedView>
   );
@@ -58,10 +58,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  counter: {
+    fontSize: 40,
+    fontWeight: "bold",
+    lineHeight: 40,
+  },
   button: {
-    paddingHorizontal: 16,
+    padding: 24,
   },
   buttonText: {
-    fontSize: 24,
+    fontSize: 32,
   },
 });
