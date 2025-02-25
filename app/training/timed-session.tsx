@@ -44,7 +44,7 @@ export default function TimedSession() {
 
   const triplesSection = (
     <ThemedView style={styles.section}>
-      <ThemedText type="title">Triples</ThemedText>
+      <ThemedText type="title">T20</ThemedText>
       <Tally onChange={setTriples} allowNegative={false} />
     </ThemedView>
   );
