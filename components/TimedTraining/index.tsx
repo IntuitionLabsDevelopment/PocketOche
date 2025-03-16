@@ -15,6 +15,7 @@ interface TimedTrainingProps {
   setBullseyes: (value: number) => void;
   onFinish: () => void;
 }
+
 export default function TimedTraining({
   setDoubles,
   setTriples,
