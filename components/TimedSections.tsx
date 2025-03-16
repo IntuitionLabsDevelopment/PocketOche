@@ -1,11 +1,12 @@
-import { Button, ButtonText } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
-import { ThemedText } from "./ThemedText";
+import { StepHeader } from "./StepHeader";
+
 interface TimedSection {
   component: React.ReactNode;
   timed?: boolean;
 }
+
 interface TimedSectionsProps {
   sections: TimedSection[];
   interval: number; // interval in milliseconds
@@ -17,16 +18,18 @@ export default function TimedSections({
 }: TimedSectionsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const progress = useState(new Animated.Value(0))[0];
-  const increment = () => {
+
+  const nextPage = () => {
     if (currentIndex < sections.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
   };
-  const decrement = () => {
+  const previousPage = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
   };
+
   useEffect(() => {
     const animateProgress = () => {
       progress.setValue(0);
@@ -47,29 +50,15 @@ export default function TimedSections({
     }
     return () => clearInterval(timer);
   }, [currentIndex, interval, progress]);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Button
-          action={"primary"}
-          variant={"outline"}
-          size={"sm"}
-          onPress={decrement}
-        >
-          <ButtonText>Back</ButtonText>
-        </Button>
-        <ThemedText type="title">
-          {currentIndex + 1} / {sections.length}
-        </ThemedText>
-        <Button
-          action={"primary"}
-          variant={"outline"}
-          size={"md"}
-          onPress={increment}
-        >
-          <ButtonText>Next</ButtonText>
-        </Button>
-      </View>
+      <StepHeader
+        currentIndex={currentIndex}
+        totalSteps={sections.length}
+        onBack={previousPage}
+        onNext={nextPage}
+      />
       {sections[currentIndex].timed && (
         <View style={styles.progressBarContainer}>
           <Animated.View
@@ -98,16 +87,11 @@ export default function TimedSections({
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
   },
   progressBarContainer: {
     height: 4,
