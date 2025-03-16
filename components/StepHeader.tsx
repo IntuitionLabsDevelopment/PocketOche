@@ -11,12 +11,12 @@ interface StepHeaderProps {
   onNext: () => void;
 }
 
-export const StepHeader = ({
+export function StepHeader({
   currentIndex,
   totalSteps,
   onBack,
   onNext,
-}: StepHeaderProps) => {
+}: StepHeaderProps) {
   return (
     <Center className="flex-row">
       <Button
@@ -44,4 +44,4 @@ export const StepHeader = ({
       </Button>
     </Center>
   );
-};
+}

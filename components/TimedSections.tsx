@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { StepHeader } from "./StepHeader";
+import { Timer } from "./Timer";
 
 interface TimedSection {
   component: React.ReactNode;
@@ -17,39 +18,49 @@ export default function TimedSections({
   interval,
 }: TimedSectionsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const progress = useState(new Animated.Value(0))[0];
+  const [secondsLeft, setSecondsLeft] = useState(interval / 1000);
 
+  const resetSecondsLeft = () => {
+    setSecondsLeft(interval / 1000);
+  };
   const nextPage = () => {
     if (currentIndex < sections.length - 1) {
       setCurrentIndex(currentIndex + 1);
+      resetSecondsLeft();
     }
   };
   const previousPage = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
+      resetSecondsLeft();
     }
   };
 
   useEffect(() => {
-    const animateProgress = () => {
-      progress.setValue(0);
-      Animated.timing(progress, {
-        toValue: 1,
-        duration: interval,
-        useNativeDriver: false,
-      }).start();
-    };
-    const timer = setInterval(() => {
+    const nextSectionTimer = setInterval(() => {
       if (!sections[currentIndex].isTimed) {
         return;
       }
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % sections.length);
+      nextPage();
     }, interval);
+
+    return () => clearInterval(nextSectionTimer);
+  }, [currentIndex, interval]);
+
+  useEffect(() => {
+    let timeLeft: NodeJS.Timeout | undefined;
     if (sections[currentIndex].isTimed) {
-      animateProgress();
+      timeLeft = setInterval(() => {
+        setSecondsLeft((prev) => {
+          if (prev > 0) {
+            return prev - 1;
+          }
+          return 0;
+        });
+      }, 1000);
     }
-    return () => clearInterval(timer);
-  }, [currentIndex, interval, progress]);
+    return () => clearInterval(timeLeft);
+  }, [currentIndex]);
 
   return (
     <View style={styles.container}>
@@ -59,21 +70,7 @@ export default function TimedSections({
         onBack={previousPage}
         onNext={nextPage}
       />
-      {sections[currentIndex].isTimed && (
-        <View style={styles.progressBarContainer}>
-          <Animated.View
-            style={[
-              styles.progressBar,
-              {
-                width: progress.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ["0%", "100%"],
-                }),
-              },
-            ]}
-          />
-        </View>
-      )}
+      {sections[currentIndex].isTimed && <Timer secondsLeft={secondsLeft} />}
       {sections.map((section, index) => (
         <View
           key={index}
@@ -92,15 +89,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-  },
-  progressBarContainer: {
-    height: 4,
-    width: "100%",
-    backgroundColor: "#e0e0e0",
-    marginTop: 8,
-  },
-  progressBar: {
-    height: "100%",
-    backgroundColor: "#3b5998",
   },
 });
