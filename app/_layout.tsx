@@ -1,4 +1,6 @@
 import migrations from "@/drizzle/migrations";
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import {
   DarkTheme,
   DefaultTheme,
@@ -45,38 +47,44 @@ export default function RootLayout() {
 
   if (error) {
     return (
-      <View>
-        <Text>Migration error: {error.message}</Text>
-      </View>
+      <GluestackUIProvider mode="light">
+        <View>
+          <Text>Migration error: {error.message}</Text>
+        </View>
+      </GluestackUIProvider>
     );
   }
 
   if (!success) {
     return (
-      <View>
-        <Text>Migration is in progress...</Text>
-      </View>
+      <GluestackUIProvider mode="light">
+        <View>
+          <Text>Migration is in progress...</Text>
+        </View>
+      </GluestackUIProvider>
     );
   }
 
   return (
-    <Suspense fallback={<ActivityIndicator size="large" />}>
-      <SQLiteProvider
-        databaseName={DATABASE_NAME}
-        options={{ enableChangeListener: true }}
-        useSuspense
-      >
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+    <GluestackUIProvider mode="light">
+      <Suspense fallback={<ActivityIndicator size="large" />}>
+        <SQLiteProvider
+          databaseName={DATABASE_NAME}
+          options={{ enableChangeListener: true }}
+          useSuspense
         >
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="training" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </SQLiteProvider>
-    </Suspense>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="training" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </SQLiteProvider>
+      </Suspense>
+    </GluestackUIProvider>
   );
 }

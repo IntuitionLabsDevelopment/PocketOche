@@ -1,10 +1,10 @@
-import { Button, StyleSheet } from "react-native";
-
 import ScrollView from "@/components/ScrollView";
+import StyledButton from "@/components/StyledButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import React from "react";
 import { useRouter } from "expo-router";
+import React from "react";
+import { StyleSheet } from "react-native";
 
 export default function TimedTraining() {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function TimedTraining() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Training</ThemedText>
-        <Button
+        <StyledButton
           title="Timed Training"
           onPress={() => {
             router.push("/training/timed");

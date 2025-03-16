@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
-import Button from "./Button";
+import StyledButton from "./StyledButton";
 import { ThemedText } from "./ThemedText";
 
 interface TimedSection {
@@ -58,11 +58,11 @@ export default function TimedSections({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Button title="Back" onPress={decrement} style={{ marginRight: 10 }} />
+        <StyledButton title="Back" onPress={decrement} />
         <ThemedText type="title">
           {currentIndex + 1} / {sections.length}
         </ThemedText>
-        <Button title="Next" onPress={increment} style={{ marginLeft: 10 }} />
+        <StyledButton title="Next" onPress={increment} />
       </View>
       {sections[currentIndex].timed && (
         <View style={styles.progressBarContainer}>

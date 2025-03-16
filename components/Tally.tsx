@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import Button from "./Button";
+import StyledButton from "./StyledButton";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 
@@ -31,14 +31,7 @@ export default function Tally({
   };
 
   function tallyButton(title: string, onPress: () => void) {
-    return (
-      <Button
-        onPress={onPress}
-        style={styles.button}
-        textStyle={styles.buttonText}
-        title={title}
-      />
-    );
+    return <StyledButton onPress={onPress} title={title} />;
   }
 
   return (

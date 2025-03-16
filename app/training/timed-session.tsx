@@ -1,5 +1,5 @@
-import Button from "@/components/Button";
 import ScrollView from "@/components/ScrollView";
+import StyledButton from "@/components/StyledButton";
 import Tally from "@/components/Tally";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -63,12 +63,7 @@ export default function TimedSession() {
     <ThemedView style={styles.section}>
       <ThemedText type="title">Doubles</ThemedText>
       <Tally onChange={setDoubles} allowNegative={false} />
-      <Button
-        title="Finish"
-        onPress={onFinish}
-        style={styles.finishButton}
-        textStyle={{ fontSize: 20 }}
-      />
+      <StyledButton title="Finish" onPress={onFinish} />
     </ThemedView>
   );
 
