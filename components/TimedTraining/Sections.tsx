@@ -12,7 +12,7 @@ export function RoundTheDoubles({
   return (
     <ThemedView style={styles.section}>
       <ThemedText type="title">Doubles</ThemedText>
-      <Tally onChange={setDoubles} />
+      <Tally onChange={setDoubles} type="multi" />
     </ThemedView>
   );
 }
@@ -25,7 +25,7 @@ export function TimedTriples({
   return (
     <ThemedView style={styles.section}>
       <ThemedText type="title">T20</ThemedText>
-      <Tally onChange={setTriples} />
+      <Tally onChange={setTriples} type="multi" />
     </ThemedView>
   );
 }
