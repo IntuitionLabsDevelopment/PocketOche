@@ -1,20 +1,15 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import React from "react";
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
+
 interface TallyProps {
   heading?: string;
   onChange?: (value: number) => void;
-  allowNegative?: boolean;
 }
-export default function Tally({
-  heading,
-  onChange,
-  allowNegative = true,
-}: TallyProps) {
+
+export default function Tally({ heading, onChange }: TallyProps) {
   const [counter, setCounter] = useState(0);
   useEffect(() => {
     if (onChange) {
@@ -23,7 +18,7 @@ export default function Tally({
   }, [counter, onChange]);
   const increment = () => setCounter(counter + 1);
   const decrement = () => {
-    if (allowNegative || counter > 0) {
+    if (counter > 0) {
       setCounter(counter - 1);
     }
   };

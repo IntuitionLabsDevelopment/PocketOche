@@ -1,24 +1,17 @@
-import { Button, ButtonText } from "@/components/ui/button";
-import React from "react";
-
-import ScrollView from "@/components/ScrollView";
-import Tally from "@/components/Tally";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import TimedSections from "@/components/TimedSections";
+import TimedTraining from "@/components/TimedTraining";
 import * as schema from "@/db/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useState } from "react";
+
 export default function TimedSession() {
   const router = useRouter();
   const params = useLocalSearchParams<{
     time?: string;
   }>();
-  const time = params.time ? parseInt(params.time) : 5;
-  const timerInterval = time * 60 * 1000;
+  const time = params.time ? parseInt(params.time) : 0;
+
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, {
     schema,
@@ -27,6 +20,7 @@ export default function TimedSession() {
   const [outers, setOuters] = useState(0);
   const [bullseyes, setBullseyes] = useState(0);
   const [doubles, setDoubles] = useState(0);
+
   const onFinish = async () => {
     // Save scores to db
     const scores = {
@@ -41,76 +35,15 @@ export default function TimedSession() {
     // Go back to main screen
     router.back();
   };
-  const triplesSection = (
-    <ThemedView style={styles.section}>
-      <ThemedText type="title">T20</ThemedText>
-      <Tally onChange={setTriples} allowNegative={false} />
-    </ThemedView>
-  );
-  const bullSection = (
-    <ThemedView style={styles.section}>
-      <ThemedText type="title">Bullseyes</ThemedText>
-      <ThemedView style={styles.bull}>
-        <Tally heading="Outer" onChange={setOuters} allowNegative={false} />
-        <Tally heading="Bull" onChange={setBullseyes} allowNegative={false} />
-      </ThemedView>
-    </ThemedView>
-  );
-  const doublesSection = (
-    <ThemedView style={styles.section}>
-      <ThemedText type="title">Doubles</ThemedText>
-      <Tally onChange={setDoubles} allowNegative={false} />
-      <Button
-        action={"primary"}
-        variant={"solid"}
-        size={"md"}
-        onPress={onFinish}
-      >
-        <ButtonText>Finish</ButtonText>
-      </Button>
-    </ThemedView>
-  );
+
   return (
-    <ScrollView>
-      <ThemedView style={styles.container}>
-        <TimedSections
-          sections={[
-            {
-              component: triplesSection,
-              timed: time > 0,
-            },
-            {
-              component: bullSection,
-              timed: time > 0,
-            },
-            {
-              component: doublesSection,
-            },
-          ]}
-          interval={timerInterval}
-        />
-      </ThemedView>
-    </ScrollView>
+    <TimedTraining
+      setBullseyes={setBullseyes}
+      setDoubles={setDoubles}
+      setOuters={setOuters}
+      setTriples={setTriples}
+      onFinish={onFinish}
+      minsPerRound={time}
+    />
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  section: {
-    marginVertical: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 16,
-  },
-  bull: {
-    flexDirection: "row",
-    flex: 1,
-    width: "100%",
-    justifyContent: "space-evenly",
-  },
-  finishButton: {
-    backgroundColor: "#30DD00",
-    padding: 16,
-  },
-});

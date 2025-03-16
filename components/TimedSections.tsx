@@ -4,7 +4,7 @@ import { StepHeader } from "./StepHeader";
 
 interface TimedSection {
   component: React.ReactNode;
-  timed?: boolean;
+  isTimed?: boolean;
 }
 
 interface TimedSectionsProps {
@@ -40,12 +40,12 @@ export default function TimedSections({
       }).start();
     };
     const timer = setInterval(() => {
-      if (!sections[currentIndex].timed) {
+      if (!sections[currentIndex].isTimed) {
         return;
       }
       setCurrentIndex((prevIndex) => (prevIndex + 1) % sections.length);
     }, interval);
-    if (sections[currentIndex].timed) {
+    if (sections[currentIndex].isTimed) {
       animateProgress();
     }
     return () => clearInterval(timer);
@@ -59,7 +59,7 @@ export default function TimedSections({
         onBack={previousPage}
         onNext={nextPage}
       />
-      {sections[currentIndex].timed && (
+      {sections[currentIndex].isTimed && (
         <View style={styles.progressBarContainer}>
           <Animated.View
             style={[
