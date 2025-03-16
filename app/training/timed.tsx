@@ -1,28 +1,26 @@
-import { useFocusEffect } from "@react-navigation/native";
-import { StyleSheet } from "react-native";
-
-import Button from "@/components/Button";
 import ScrollView from "@/components/ScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Button, ButtonText } from "@/components/ui/button";
 import * as schema from "@/db/schema";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Picker } from "@react-native-picker/picker";
+import { useFocusEffect } from "@react-navigation/native";
 import { desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useCallback, useState } from "react";
-
+import { StyleSheet } from "react-native";
 export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);
   const [selectedTime, setSelectedTime] = useState(5);
   const textColor = useThemeColor({}, "text");
   const router = useRouter();
-
   const db = useSQLiteContext();
-  const drizzleDb = drizzle(db, { schema });
-
+  const drizzleDb = drizzle(db, {
+    schema,
+  });
   const load = async () => {
     const data = await drizzleDb.query.timedTrainingTable.findMany({
       limit: 10,
@@ -30,13 +28,11 @@ export default function TimedTraining() {
     });
     setData(data);
   };
-
   useFocusEffect(
     useCallback(() => {
       load();
-    }, [])
+    }, []),
   );
-
   return (
     <ScrollView>
       <ThemedText type="description">
@@ -51,7 +47,9 @@ export default function TimedTraining() {
         <Picker
           selectedValue={selectedTime}
           onValueChange={(itemValue, itemIndex) => setSelectedTime(itemValue)}
-          style={{ color: textColor }}
+          style={{
+            color: textColor,
+          }}
           dropdownIconColor={textColor}
         >
           <Picker.Item label="No timer" value={-1} />
@@ -62,12 +60,15 @@ export default function TimedTraining() {
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <Button
-          title="Start New Session"
+          action={"positive"}
+          variant={"solid"}
+          size={"xl"}
           onPress={() =>
             router.push(`/training/timed-session?time=${selectedTime}`)
           }
-          style={{ backgroundColor: "#30DD00" }}
-        />
+        >
+          <ButtonText>Start New Session</ButtonText>
+        </Button>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Recent Training Sessions</ThemedText>
@@ -92,18 +93,20 @@ export default function TimedTraining() {
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <Button
-          title="Delete All Sessions Data"
+          action={"negative"}
+          variant={"solid"}
+          size={"md"}
           onPress={async () => {
             await drizzleDb.delete(schema.timedTrainingTable);
             load();
           }}
-          style={{ backgroundColor: "#FF0000" }}
-        />
+        >
+          <ButtonText>Delete All Sessions Data</ButtonText>
+        </Button>
       </ThemedView>
     </ScrollView>
   );
 }
-
 const styles = StyleSheet.create({
   titleContainer: {
     height: 50,
