@@ -1,11 +1,25 @@
-import { Button, ButtonText } from "@/components/ui/button";
-
 import ScrollView from "@/components/ScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useRouter } from "expo-router";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Href, useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet } from "react-native";
+
+const training: {
+  title: string;
+  route: Href;
+}[] = [
+  {
+    title: "Timed Training",
+    route: "/training/timed",
+  },
+  {
+    title: "Around the Doubles",
+    route: "/training/doubles",
+  },
+];
+
 export default function TimedTraining() {
   const router = useRouter();
   return (
@@ -15,16 +29,19 @@ export default function TimedTraining() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Training</ThemedText>
-        <Button
-          action={"primary"}
-          variant={"solid"}
-          size={"lg"}
-          onPress={() => {
-            router.push("/training/timed");
-          }}
-        >
-          <ButtonText>Timed Training</ButtonText>
-        </Button>
+        {training.map((item) => (
+          <Button
+            action={"primary"}
+            variant={"solid"}
+            size={"lg"}
+            onPress={() => {
+              router.push(item.route);
+            }}
+            key={item.title}
+          >
+            <ButtonText>{item.title}</ButtonText>
+          </Button>
+        ))}
       </ThemedView>
     </ScrollView>
   );

@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useCallback, useState } from "react";
 import { StyleSheet } from "react-native";
+
 export default function TimedTraining() {
   const [data, setData] = useState<schema.TimedTraining[]>([]);
   const [selectedTime, setSelectedTime] = useState(5);
@@ -31,7 +32,7 @@ export default function TimedTraining() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, []),
+    }, [])
   );
   return (
     <ScrollView>

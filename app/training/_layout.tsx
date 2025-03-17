@@ -8,6 +8,11 @@ export default function Layout() {
         name="timed-session"
         options={{ title: "Timed Training Session" }}
       />
+      <Stack.Screen name="doubles" options={{ title: "Around the Doubles" }} />
+      <Stack.Screen
+        name="doubles-session"
+        options={{ title: "Doubles Session" }}
+      />
     </Stack>
   );
 }

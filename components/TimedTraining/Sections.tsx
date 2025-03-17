@@ -4,19 +4,6 @@ import { ThemedView } from "@/components/ThemedView";
 import React from "react";
 import { StyleSheet } from "react-native";
 
-export function RoundTheDoubles({
-  setDoubles,
-}: {
-  setDoubles: (value: number) => void;
-}) {
-  return (
-    <ThemedView style={styles.section}>
-      <ThemedText type="title">Doubles</ThemedText>
-      <Tally onChange={setDoubles} type="multi" />
-    </ThemedView>
-  );
-}
-
 export function TimedTriples({
   setTriples,
 }: {
