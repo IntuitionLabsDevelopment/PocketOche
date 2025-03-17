@@ -12,7 +12,9 @@ export default function TrainingSection({
 }: TrainingSectionProps) {
   return (
     <Center>
-      <Heading size="3xl">{headerText}</Heading>
+      <Heading size="3xl" className="my-2">
+        {headerText}
+      </Heading>
       {children}
     </Center>
   );
