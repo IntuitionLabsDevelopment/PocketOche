@@ -28,7 +28,7 @@ export default function TimedTraining() {
         <ThemedText type="title">Pocket Oche</ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Training</ThemedText>
+        <ThemedText type="subtitle">Darts Training</ThemedText>
         {training.map((item) => (
           <Button
             action={"primary"}

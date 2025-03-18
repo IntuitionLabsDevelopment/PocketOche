@@ -1,5 +1,8 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import * as schema from "@/db/schema";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { useSQLiteContext } from "expo-sqlite";
+import { default as React, useEffect, useState } from "react";
 import TrainingSection from "./TrainingSection";
 import { Heading } from "./ui/heading";
 import { Text } from "./ui/text";
@@ -7,12 +10,17 @@ import { VStack } from "./ui/vstack";
 
 interface AroundTheDoublesProps {
   setDoubles?: (value: number) => void;
-  onFinish: () => void;
+  onFinish?: () => void;
 }
 export function AroundTheDoubles({
   setDoubles,
   onFinish,
 }: AroundTheDoublesProps) {
+  const db = useSQLiteContext();
+  const drizzleDb = drizzle(db, {
+    schema,
+  });
+
   const [activeNumber, setActiveNumber] = useState<number>(1);
   const [doublesHit, setDoublesHit] = useState<number[]>(new Array(20).fill(0));
   const totalDoubles = doublesHit.reduce((acc, value) => acc + value, 0);
@@ -20,6 +28,14 @@ export function AroundTheDoubles({
   useEffect(() => {
     if (setDoubles) setDoubles(totalDoubles);
   }, [activeNumber, doublesHit, setDoubles, totalDoubles]);
+
+  const finishDoubles = async () => {
+    const scores = {
+      scores: doublesHit,
+    };
+    await drizzleDb.insert(schema.doublesTrainingTable).values(scores);
+    if (onFinish) onFinish();
+  };
 
   if (activeNumber > 20) {
     return (
@@ -33,7 +49,7 @@ export function AroundTheDoubles({
             {index + 1}: {value}
           </Text>
         ))}
-        <Button action={"positive"} onPress={onFinish}>
+        <Button action={"positive"} onPress={finishDoubles}>
           <ButtonText>Complete Training</ButtonText>
         </Button>
       </TrainingSection>

@@ -1,6 +1,6 @@
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import migrations from "@/drizzle/migrations";
 import "@/global.css";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import {
   DarkTheme,
   DefaultTheme,
