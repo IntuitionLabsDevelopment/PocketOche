@@ -1,3 +1,4 @@
+import DoublesPastSummary from "@/components/doubles/PastSummary";
 import ScrollView from "@/components/ScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -5,10 +6,8 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet } from "react-native";
-
 export default function DoublesTraining() {
   const router = useRouter();
-
   return (
     <ScrollView>
       <ThemedText type="description">
@@ -24,6 +23,7 @@ export default function DoublesTraining() {
           <ButtonText>Start New Session</ButtonText>
         </Button>
       </ThemedView>
+      <DoublesPastSummary />
     </ScrollView>
   );
 }

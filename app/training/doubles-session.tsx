@@ -6,12 +6,7 @@ import React from "react";
 export default function TimedSession() {
   const router = useRouter();
 
-  const onFinish = async () => {
-    // Save scores to db
-
-    // Go back to main screen
-    router.back();
-  };
+  const onFinish = async () => router.back();
 
   return (
     <ScrollView>
