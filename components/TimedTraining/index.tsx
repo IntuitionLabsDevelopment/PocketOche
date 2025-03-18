@@ -1,11 +1,10 @@
 import ScrollView from "@/components/ScrollView";
 import { ThemedView } from "@/components/ThemedView";
 import TimedSections from "@/components/TimedSections";
-import { Button, ButtonText } from "@/components/ui/button";
-import { VStack } from "@/components/ui/vstack";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { RoundTheDoubles, TimedBullseyes, TimedTriples } from "./Sections";
+import { AroundTheDoubles } from "../AroundTheDoubles";
+import { TimedBullseyes, TimedTriples } from "./Sections";
 
 interface TimedTrainingProps {
   minsPerRound?: number;
@@ -47,17 +46,7 @@ export default function TimedTraining({
             },
             {
               component: (
-                <VStack>
-                  <RoundTheDoubles setDoubles={setDoubles} />
-                  <Button
-                    action={"positive"}
-                    variant={"solid"}
-                    size={"lg"}
-                    onPress={onFinish}
-                  >
-                    <ButtonText>Finish</ButtonText>
-                  </Button>
-                </VStack>
+                <AroundTheDoubles onFinish={onFinish} setDoubles={setDoubles} />
               ),
             },
           ]}

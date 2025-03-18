@@ -12,15 +12,18 @@ import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useCallback, useState } from "react";
 import { StyleSheet } from "react-native";
+
 export default function TimedTraining() {
-  const [data, setData] = useState<schema.TimedTraining[]>([]);
-  const [selectedTime, setSelectedTime] = useState(5);
-  const textColor = useThemeColor({}, "text");
   const router = useRouter();
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, {
     schema,
   });
+
+  const [data, setData] = useState<schema.TimedTraining[]>([]);
+  const [selectedTime, setSelectedTime] = useState(5);
+  const textColor = useThemeColor({}, "text");
+
   const load = async () => {
     const data = await drizzleDb.query.timedTrainingTable.findMany({
       limit: 10,
@@ -31,8 +34,9 @@ export default function TimedTraining() {
   useFocusEffect(
     useCallback(() => {
       load();
-    }, []),
+    }, [])
   );
+
   return (
     <ScrollView>
       <ThemedText type="description">
